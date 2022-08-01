@@ -195,7 +195,9 @@ export type CrosswordProviderProps = EnhancedProps<
       direction: Direction,
       number: string,
       correct: boolean,
-      answer: string
+      answer: string,
+      guess: string,
+      firstPos: GridPosition
     ) => void;
 
     /**
@@ -433,10 +435,12 @@ const CrosswordProvider = React.forwardRef<
         direction: Direction,
         number: string,
         correct: boolean,
-        answer: string
+        answer: string,
+        guess: string,
+        firstPos: GridPosition
       ) => {
         if (onAnswerComplete) {
-          onAnswerComplete(direction, number, correct, answer);
+          onAnswerComplete(direction, number, correct, answer, guess, firstPos);
         }
 
         if (correct) {
@@ -478,6 +482,8 @@ const CrosswordProvider = React.forwardRef<
           // when the answer is simply incomplete.
           let complete = true;
           let correct = true;
+          let guess = '';
+          let firstPos: GridPosition | boolean = false;
 
           for (let i = 0; i < info.answer.length; i++) {
             const checkCell = getCellData(
@@ -490,7 +496,13 @@ const CrosswordProvider = React.forwardRef<
               correct = false;
               break;
             }
-
+            guess += checkCell.guess;
+            if (!firstPos) {
+              firstPos = {
+                row: info.row + (across ? 0 : i),
+                col: info.col + (across ? i : 0),
+              };
+            }
             if (checkCell.guess !== checkCell.answer) {
               correct = false;
             }
@@ -512,7 +524,14 @@ const CrosswordProvider = React.forwardRef<
           );
 
           if (complete) {
-            notifyAnswerComplete(direction, number, correct, info.answer);
+            notifyAnswerComplete(
+              direction,
+              number,
+              correct,
+              info.answer,
+              guess,
+              firstPos as GridPosition
+            );
           }
         });
       },
