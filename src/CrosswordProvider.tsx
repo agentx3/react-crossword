@@ -491,7 +491,7 @@ const CrosswordProvider = React.forwardRef<
               info.col + (across ? i : 0)
             ) as UsedCellData;
 
-            if (!checkCell.guess) {
+            if (!checkCell.guess || checkCell.guess === ' ') {
               complete = false;
               correct = false;
               break;
@@ -996,8 +996,9 @@ const CrosswordProvider = React.forwardRef<
             produce((draft) => {
               bothDirections.forEach((direction) => {
                 draft?.[direction].forEach((clueInfo) => {
+                  console.log(JSON.stringify(clueInfo, null, 4));
                   clueInfo.complete = true;
-                  clueInfo.correct = true;
+                  clueInfo.correct = false;
                 });
               });
             })

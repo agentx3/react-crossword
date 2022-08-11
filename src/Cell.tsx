@@ -80,7 +80,10 @@ export default function Cell({
     <g
       onClick={handleClick}
       style={{ cursor: 'default', fontSize: `${fontSize}px` }}
-      className="clue-cell"
+      className={
+        answer === guess && guess !== ' ' ? 'clue-cell-correct' : 'clue-cell'
+      }
+      id={`R${row}C${col}`}
     >
       <rect
         x={x + cellPadding}
