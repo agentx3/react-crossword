@@ -249,7 +249,7 @@ export type CrosswordProviderProps = EnhancedProps<
      * whether correct or not; called with `(correct)` argument, a boolean which
      * indicates whether the crossword is correct or not.
      */
-    onCrosswordComplete?: (correct: boolean) => void;
+    onCrosswordComplete?: (data: GridData) => void;
 
     /**
      * callback function that's called when the overall crossword is completely
@@ -473,6 +473,13 @@ const CrosswordProvider = React.forwardRef<
       [onAnswerComplete, onAnswerCorrect, onAnswerIncorrect, onCorrect]
     );
 
+
+    const notifyGridComplete = useCallback((isComplete: boolean, gData: GridData) => {
+        if (onCrosswordComplete && isComplete) {
+          onCrosswordComplete(gData);
+      }
+    }, [data, getCellData, onCrosswordComplete]);
+
     const checkCorrectness = useCallback(
       (row: number, col: number) => {
         const cell = getCellData(row, col);
@@ -522,7 +529,7 @@ const CrosswordProvider = React.forwardRef<
               };
             }
             if (checkCell.guess !== checkCell.answer) {
-              correct = false;
+              // correct = false;
             }
           }
 
@@ -552,8 +559,9 @@ const CrosswordProvider = React.forwardRef<
             );
           }
         });
+        notifyGridComplete(true, gridData);
       },
-      [data, getCellData, notifyAnswerComplete]
+      [data, getCellData, notifyAnswerComplete, gridData]
     );
 
     // Any time the checkQueue changes, call checkCorrectness!
@@ -588,15 +596,25 @@ const CrosswordProvider = React.forwardRef<
       return { crosswordComplete: complete, crosswordCorrect: correct };
     }, [clues]);
 
+
+    // useEffect(() => {
+    //   if (crosswordComplete){
+    //     notifyGridComplete(gridData);
+    //   }
+    //     }, [gridData, crosswordComplete, notifyGridComplete]);
+
     // Let the consumer know everything's correct (or not) if they've asked to
     // be informed.
     useEffect(() => {
       if (crosswordComplete) {
-        if (onCrosswordComplete) {
-          onCrosswordComplete(crosswordCorrect);
+        if (crosswordCorrect) {
+          // if (onCrosswordCorrect) {
+          //   onCrosswordCorrect();
+          // }
+          // notifyGridComplete(crosswordComplete, gridData);
         }
         if (onCrosswordCorrect) {
-          onCrosswordCorrect(crosswordCorrect);
+          // onCrosswordCorrect(crosswordCorrect);
         }
       }
     }, [
@@ -604,6 +622,7 @@ const CrosswordProvider = React.forwardRef<
       crosswordCorrect,
       onCrosswordComplete,
       onCrosswordCorrect,
+      gridData
     ]);
 
     // focus and movement

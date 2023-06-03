@@ -23,7 +23,7 @@ import CrosswordProvider, {
 
 import { CrosswordContext, CrosswordSizeContext } from './context';
 
-import { AnswerTuple, CluesInput, CellData, GridPosition } from './types';
+import { GridData, Direction, AnswerTuple, CluesInput, CellData, GridPosition } from './types';
 
 import { useIpuz } from './ipuz';
 
@@ -31,6 +31,7 @@ export {
   Cell,
   Clue,
   DirectionClues,
+  Direction,
   Crossword,
   CrosswordImperative,
   CrosswordProps,
