@@ -45,8 +45,8 @@
     "prepare": "is-ci || husky install"
   },
   "files": [
-    "/dist",
-    "/src",
+    "dist",
+    "src",
     "!**/__test__",
     "!**/*.test.js"
   ],
