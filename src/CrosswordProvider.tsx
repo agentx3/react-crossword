@@ -473,12 +473,14 @@ const CrosswordProvider = React.forwardRef<
       [onAnswerComplete, onAnswerCorrect, onAnswerIncorrect, onCorrect]
     );
 
-
-    const notifyGridComplete = useCallback((isComplete: boolean, gData: GridData) => {
+    const notifyGridComplete = useCallback(
+      (isComplete: boolean, gData: GridData) => {
         if (onCrosswordComplete && isComplete) {
           onCrosswordComplete(gData);
-      }
-    }, [data, getCellData, onCrosswordComplete]);
+        }
+      },
+      [data, getCellData, onCrosswordComplete]
+    );
 
     const checkCorrectness = useCallback(
       (row: number, col: number) => {
@@ -528,8 +530,17 @@ const CrosswordProvider = React.forwardRef<
                 col: info.col + (across ? i : 0),
               };
             }
-            if (checkCell.guess !== checkCell.answer) {
-              // correct = false;
+            if (
+              checkCell.guess.toLowerCase() !== checkCell.answer.toLowerCase()
+            ) {
+              console.log(
+                'guess: ' +
+                  checkCell.guess.toLowerCase() +
+                  ' answer: ' +
+                  checkCell.answer.toLowerCase(),
+                'are not equal'
+              );
+              correct = false;
             }
           }
 
@@ -596,7 +607,6 @@ const CrosswordProvider = React.forwardRef<
       return { crosswordComplete: complete, crosswordCorrect: correct };
     }, [clues]);
 
-
     // useEffect(() => {
     //   if (crosswordComplete){
     //     notifyGridComplete(gridData);
@@ -622,7 +632,7 @@ const CrosswordProvider = React.forwardRef<
       crosswordCorrect,
       onCrosswordComplete,
       onCrosswordCorrect,
-      gridData
+      gridData,
     ]);
 
     // focus and movement

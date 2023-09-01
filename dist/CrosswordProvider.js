@@ -288,8 +288,12 @@ const CrosswordProvider = react_1.default.forwardRef(({ data, theme, onAnswerCom
                         col: info.col + (across ? i : 0),
                     };
                 }
-                if (checkCell.guess !== checkCell.answer) {
-                    // correct = false;
+                if (checkCell.guess.toLowerCase() !== checkCell.answer.toLowerCase()) {
+                    console.log('guess: ' +
+                        checkCell.guess.toLowerCase() +
+                        ' answer: ' +
+                        checkCell.answer.toLowerCase(), 'are not equal');
+                    correct = false;
                 }
             }
             // update the clue state
@@ -351,7 +355,7 @@ const CrosswordProvider = react_1.default.forwardRef(({ data, theme, onAnswerCom
         crosswordCorrect,
         onCrosswordComplete,
         onCrosswordCorrect,
-        gridData
+        gridData,
     ]);
     // focus and movement
     const focus = (0, react_1.useCallback)(() => {
